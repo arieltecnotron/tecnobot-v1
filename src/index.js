@@ -6,14 +6,14 @@ const axios = require('axios');
 
 app.use(express.json());
 
-// ConfiguraciÛn de WhatsApp API
+// Configuraci√≥n de WhatsApp API
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
 const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
 
-// Estado temporal de las conversaciones (en producciÛn esto irÌa en una base de datos)
+// Estado temporal de las conversaciones
 const conversations = new Map();
 
-// FunciÛn para enviar mensajes
+// Funci√≥n para enviar mensajes
 async function sendWhatsAppMessage(to, message) {
     try {
         const response = await axios({
@@ -42,7 +42,7 @@ async function sendWhatsAppMessage(to, message) {
     }
 }
 
-// FunciÛn para procesar mensajes seg˙n el estado de la conversaciÛn
+// Funci√≥n para procesar mensajes seg√∫n el estado de la conversaci√≥n
 async function processMessage(from, message) {
     let conversation = conversations.get(from) || {
         step: 'START',
@@ -53,14 +53,14 @@ async function processMessage(from, message) {
 
     switch (conversation.step) {
         case 'START':
-            response = '°Hola! ?? Soy TecnoBotv1, tu asistente para tomar medidas.\n\n' +
+            response = '¬°Hola! üëã Soy TecnoBotv1, tu asistente para tomar medidas.\n\n' +
                       'Por favor, dime tu nombre para comenzar.';
             conversation.step = 'WAITING_NAME';
             break;
 
         case 'WAITING_NAME':
             conversation.data.name = message;
-            response = `Gracias ${message}! ??\n\n` +
+            response = `Gracias ${message}! üòä\n\n` +
                       'Ahora necesito tu talla de ropa superior (S/M/L/XL/XXL).\n' +
                       'Por favor, indica solo la letra correspondiente.';
             conversation.step = 'WAITING_TOP_SIZE';
@@ -70,12 +70,12 @@ async function processMessage(from, message) {
             const upperSize = message.toUpperCase();
             if (['S', 'M', 'L', 'XL', 'XXL'].includes(upperSize)) {
                 conversation.data.topSize = upperSize;
-                response = '°Perfecto! ??\n\n' +
-                          'Ahora necesito tu talla de pantalÛn (30/32/34/36/38/40/42/44).\n' +
-                          'Por favor, indica solo el n˙mero.';
+                response = '¬°Perfecto! üëç\n\n' +
+                          'Ahora necesito tu talla de pantal√≥n (30/32/34/36/38/40/42/44).\n' +
+                          'Por favor, indica solo el n√∫mero.';
                 conversation.step = 'WAITING_BOTTOM_SIZE';
             } else {
-                response = '? Por favor, indica una talla v·lida (S/M/L/XL/XXL).';
+                response = '‚ùå Por favor, indica una talla v√°lida (S/M/L/XL/XXL).';
             }
             break;
 
@@ -83,50 +83,47 @@ async function processMessage(from, message) {
             const bottomSize = message.trim();
             if (['30','32','34','36','38','40','42','44'].includes(bottomSize)) {
                 conversation.data.bottomSize = bottomSize;
-                response = '°Excelente! ??\n\n' +
+                response = '¬°Excelente! üéâ\n\n' +
                           'He registrado los siguientes datos:\n' +
                           `Nombre: ${conversation.data.name}\n` +
                           `Talla Superior: ${conversation.data.topSize}\n` +
                           `Talla Inferior: ${conversation.data.bottomSize}\n\n` +
-                          'øLos datos son correctos? (Responde SI o NO)';
+                          '¬øLos datos son correctos? (Responde SI o NO)';
                 conversation.step = 'CONFIRM_DATA';
             } else {
-                response = '? Por favor, indica una talla v·lida (30/32/34/36/38/40/42/44).';
+                response = '‚ùå Por favor, indica una talla v√°lida (30/32/34/36/38/40/42/44).';
             }
             break;
 
         case 'CONFIRM_DATA':
             if (message.toUpperCase() === 'SI') {
-                response = '°Perfecto! ?? Tus datos han sido guardados.\n\n' +
-                          'Gracias por usar TecnoBotv1. øNecesitas algo m·s? (SI/NO)';
+                response = '¬°Perfecto! üéä Tus datos han sido guardados.\n\n' +
+                          'Gracias por usar TecnoBotv1. ¬øNecesitas algo m√°s? (SI/NO)';
                 conversation.step = 'ASK_MORE_HELP';
-                // AquÌ guardarÌamos los datos en la base de datos
             } else if (message.toUpperCase() === 'NO') {
                 response = 'De acuerdo, empecemos de nuevo.\n\nPor favor, dime tu nombre.';
                 conversation.step = 'WAITING_NAME';
                 conversation.data = {};
             } else {
-                response = '? Por favor, responde SI o NO.';
+                response = '‚ùå Por favor, responde SI o NO.';
             }
             break;
 
         case 'ASK_MORE_HELP':
             if (message.toUpperCase() === 'NO') {
-                response = '°Gracias por usar TecnoBotv1! ??\nQue tengas un excelente dÌa.';
-                // Limpiamos la conversaciÛn
+                response = '¬°Gracias por usar TecnoBotv1! üëã\nQue tengas un excelente d√≠a.';
                 conversations.delete(from);
-                return response;
             } else if (message.toUpperCase() === 'SI') {
                 response = 'De acuerdo, empecemos de nuevo.\n\nPor favor, dime tu nombre.';
                 conversation.step = 'WAITING_NAME';
                 conversation.data = {};
             } else {
-                response = '? Por favor, responde SI o NO.';
+                response = '‚ùå Por favor, responde SI o NO.';
             }
             break;
 
         default:
-            response = '°Hola! Parece que hubo un error. Empecemos de nuevo.\n\nPor favor, dime tu nombre.';
+            response = '¬°Hola! Parece que hubo un error. Empecemos de nuevo.\n\nPor favor, dime tu nombre.';
             conversation.step = 'WAITING_NAME';
             conversation.data = {};
     }
@@ -135,7 +132,7 @@ async function processMessage(from, message) {
     return response;
 }
 
-// VerificaciÛn del webhook
+// Verificaci√≥n del webhook
 app.get('/webhook', (req, res) => {
     const verify_token = process.env.VERIFY_TOKEN;
     const mode = req.query['hub.mode'];
@@ -168,7 +165,6 @@ app.post('/webhook', async (req, res) => {
                 console.log('Mensaje recibido de:', from);
                 console.log('Contenido:', msg_body);
 
-                // Procesar mensaje y enviar respuesta
                 const response = await processMessage(from, msg_body);
                 await sendWhatsAppMessage(from, response);
             }
@@ -184,6 +180,6 @@ app.post('/webhook', async (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`TecnoBotv1 ejecut·ndose en puerto ${PORT}`);
+    console.log(`TecnoBotv1 ejecut√°ndose en puerto ${PORT}`);
     console.log('Esperando mensajes...');
 });
