@@ -1,0 +1,21 @@
+{
+  "name": "tecnobot-v1",
+  "version": "1.0.0",
+  "description": "WhatsApp Bot para gestión de tallas",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["whatsapp", "bot", "tallas"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.7",
+    "cors": "^2.8.5",
+    "mysql2": "^3.12.0"
+  }
+}
