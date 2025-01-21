@@ -1,11 +1,11 @@
 {
   "name": "tecnobot-v1",
   "version": "1.0.0",
-  "description": "WhatsApp Bot para gestión de tallas",
-  "main": "src/index.js",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "node src/index.js"
+    "start": "node src/index.js"
   },
   "dependencies": {
     "express": "^4.21.2",
