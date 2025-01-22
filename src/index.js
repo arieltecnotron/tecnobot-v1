@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const axios = require('axios'); // Añade esta línea para importar axios
 
 const app = express();
 
@@ -23,29 +24,12 @@ app.use(cookieParser());
 // Rutas de autenticación
 const authRoutes = require('./controllers/authController');
 app.use('/api/auth', authRoutes.router);
-
 // Configuración de WhatsApp API
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
 const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
 
 // Estado temporal de las conversaciones
 const conversations = new Map();
-
-// Middleware para servir archivos estáticos del frontend
-app.use(express.static(path.join(__dirname, 'frontend/dist')));
-
-// Rutas de API
-app.use('/api/auth', require('./controllers/authController').router);
-
-// Manejar rutas de React SPA
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
-});
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-    console.log(`Servidor ejecutándose en puerto ${PORT}`);
-});
 
 // Función para enviar mensajes
 async function sendWhatsAppMessage(to, message) {
@@ -181,7 +165,7 @@ app.get('/webhook', (req, res) => {
             res.sendStatus(403);
         }
     }
-});
+;
 
 // Manejo de mensajes entrantes
 app.post('/webhook', async (req, res) => {
@@ -210,13 +194,14 @@ app.post('/webhook', async (req, res) => {
         console.error('Error en webhook:', error);
         res.sendStatus(500);
     }
-});
-// Servir archivos estáticos del frontend
-app.use(express.static(path.join(__dirname, 'frontend/dist')));
 
-// Manejar rutas de React SPA
+
+// Servir archivos estáticos del frontend
+app.use(express.static(path.join(__dirname, '../dist')));
+
+// Manejar rutas del frontend
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
+  res.sendFile(path.join(__dirname, '../dist/index.html'));
 });
 
 const PORT = process.env.PORT || 3001;
