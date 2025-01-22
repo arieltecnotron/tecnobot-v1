@@ -14,7 +14,7 @@ const Dashboard = () => {
 
   const menuItems = [
     { name: 'Base de Datos', icon: Database, path: '/database' },
-    { name: 'Configuración IA', icon: Brain, path: '/ai-config' },
+    { name: 'ConfiguraciÃ³n IA', icon: Brain, path: '/ai-config' },
     { name: 'Ajustes', icon: Settings, path: '/settings' },
   ];
 
@@ -27,7 +27,7 @@ const Dashboard = () => {
             <span className="text-xl font-bold">TecnoBot Admin</span>
             <button className="flex items-center text-red-600 hover:text-red-800">
               <LogOut className="w-5 h-5 mr-2" />
-              Cerrar Sesión
+              Cerrar SesiÃ³n
             </button>
           </div>
         </div>
@@ -35,7 +35,7 @@ const Dashboard = () => {
 
       {/* Contenido principal */}
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        {/* Estadísticas */}
+        {/* EstadÃ­sticas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {stats.map((stat, index) => (
             <div key={index} className="bg-white p-6 rounded-lg shadow">
@@ -50,7 +50,7 @@ const Dashboard = () => {
           ))}
         </div>
 
-        {/* Menú de accesos rápidos */}
+        {/* MenÃº de accesos rÃ¡pidos */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {menuItems.map((item, index) => (
             <div 
