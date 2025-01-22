@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'frontend/dist')));
 // Rutas de API
 app.use('/api/auth', require('./controllers/authController').router);
 
-/ Manejar rutas de React SPA
+// Manejar rutas de React SPA
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
 });
