@@ -1,11 +1,29 @@
 // src/index.js
 require('dotenv').config();
-const path = require('path');
 const express = require('express');
-const app = express();
-const axios = require('axios');
+const cors = require('cors');
+const path = require('path');
+const cookieParser = require('cookie-parser');
 
+const app = express();
+
+// Configuraciones de middleware
+app.use(cors({
+    origin: [
+        'https://web-production-3323.up.railway.app', 
+        'http://localhost:3000',
+        'http://localhost:5173'
+    ],
+    credentials: true
+}));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// Rutas de autenticación
+const authRoutes = require('./controllers/authController');
+app.use('/api/auth', authRoutes.router);
+
 
 // Configuración de WhatsApp API
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
@@ -20,9 +38,14 @@ app.use(express.static(path.join(__dirname, 'frontend/dist')));
 // Rutas de API
 app.use('/api/auth', require('./controllers/authController').router);
 
-// Ruta para manejar rutas del SPA
+/ Manejar rutas de React SPA
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
+    res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
+});
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`Servidor ejecutándose en puerto ${PORT}`);
 });
 
 // Función para enviar mensajes
