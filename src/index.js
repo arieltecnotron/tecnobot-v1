@@ -1,5 +1,6 @@
 // src/index.js
 require('dotenv').config();
+const path = require('path');
 const express = require('express');
 const app = express();
 const axios = require('axios');
@@ -12,6 +13,17 @@ const PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
 
 // Estado temporal de las conversaciones
 const conversations = new Map();
+
+// Middleware para servir archivos estáticos del frontend
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
+
+// Rutas de API
+app.use('/api/auth', require('./controllers/authController').router);
+
+// Ruta para manejar rutas del SPA
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
+});
 
 // Función para enviar mensajes
 async function sendWhatsAppMessage(to, message) {
