@@ -1,4 +1,4 @@
-// src/index.js
+// src/index.js mod de visual
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
@@ -23,7 +23,6 @@ app.use(cookieParser());
 // Rutas de autenticación
 const authRoutes = require('./controllers/authController');
 app.use('/api/auth', authRoutes.router);
-
 
 // Configuración de WhatsApp API
 const WHATSAPP_TOKEN = process.env.WHATSAPP_TOKEN;
@@ -212,9 +211,15 @@ app.post('/webhook', async (req, res) => {
         res.sendStatus(500);
     }
 });
+// Servir archivos estáticos del frontend
+app.use(express.static(path.join(__dirname, 'frontend/dist')));
+
+// Manejar rutas de React SPA
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
+});
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-    console.log(`TecnoBotv1 ejecutándose en puerto ${PORT}`);
-    console.log('Esperando mensajes...');
+    console.log(`Servidor ejecutándose en puerto ${PORT}`);
 });
